@@ -1,22 +1,54 @@
-
+const express = require("express")
 require("dotenv").config();
-const express = require("express");
+const connectDB = require("./config/database.js")
+const app = express();  
+const User = require("./models/user.js")
 
-const app = express();
-
-// Middleware (optional)
+// Middleware
 
 app.use(express.json());
 
-app.use("/", (req, res) => {
-  res.send("Hello from the server!");
+
+
+
+
+app.post("/signup", async(req, res) => {
+      // console.log(req.body);
+ 
+  // Creating a instance of User model 
+  const user = new User(req.body);
+  await user.save()
+  res.send("User registered successfully");
+
+
 })
 
-// Start Server
-
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-})
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+connectDB()
+  .then(() => {
+    console.log("MongoDB Connected...");
+
+    // Server Start
+    const port = process.env.PORT || 3001;
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+
+  })
+  .catch((err) => {
+    console.error("MongoDB can not  connected", err);
+  });
