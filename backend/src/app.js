@@ -38,7 +38,7 @@ app.get("/user", async (req, res) => {
   } catch (err) {
     res.status(400).send("Something Went Wrong");
   }
-});
+});                 
 
 
 
@@ -76,7 +76,37 @@ app.get("/feed", async (req, res) => {
 });
 
 
+// delete API DELETE /user - delete user by userId from database
+app.delete("/user", async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if(!user) {
+      res.status(404).send("User not found");
+    }else {
+      res.send("User deleted successfully");
+    }
+  } catch (err) {
+    res.status(400).send("Something Went Wrong");
+  }
+})
 
+// update API Patch /user - update user by userId in database
+app.patch("/user", async (req, res) => {
+  const userId = req.body.userId;
+  const data = req.body;
+
+  console.log(data);
+
+  try{
+    await User.findByIdAndUpdate({ _id: userId}, data);
+    res.send("User Update Successfully")
+
+  }catch (err) {
+    res.status(400).send("Something Went Wrong");
+  }
+
+});
 
 
 
