@@ -1,31 +1,137 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minlength: 4,
+      maxlength: 20,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      trim: true,
+    },
+    emailId: {
+      type: String,
+      required: true,
+      unique: true,
+      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    age: {
+      type: Number,
+      min: 18,
+      max: 99,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      trim: true,
+      validate(value) {
+        if (!["Male", "Female", "Other"].includes(value)) {
+          throw new Error("Invalid gender. Choose from Male, Female, or Other");
+        }
+      },
+    },
+    profileUrl: {
+      type: String,
+      default:
+        "https://t4.ftcdn.net/jpg/02/44/43/69/240_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg",
+    },
+    about: {
+      type: String,
+      default: "This is a sample user profile. Update it as per your needs.",
+    },
+    skills: [{ type: String }],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      immutable: true, // Ensures createdAt cannot be modified later
+    },
   },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  emailId: {
-    type: String,
-    required: true,
-
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-  },
-  gender: {
-    type: String,
-  },
-});
+  { timestamps: { createdAt: true, updatedAt: true } } // Enables automatic timestamping
+);
 
 const userModel = mongoose.model("User", userSchema);
 
-module.exports = userModel; 
+module.exports = userModel;
+
+
+
+// const mongoose = require("mongoose");
+
+// const userSchema = new mongoose.Schema(
+//   {
+//     firstName: {
+//       type: String,
+//       required: true,
+//       minlength: 4,
+//       maxlength: 20,
+//       trim: true,
+//     },
+//     lastName: {
+//       type: String,
+//       trim: true,
+//     },
+//     emailId: {
+//       type: String,
+//       required: true,
+//       unique: true,
+//       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+//       lowercase: true,
+//       trim: true,
+//     },
+//     password: {
+//       type: String,
+//       required: true,
+//     },
+//     age: {
+//       type: Number,
+//       min: 18,
+//       max: 99,
+//       trim: true,
+//     },
+//     gender: {
+//       type: String,
+//       trim: true,
+//       validate(value) {
+//         if (!["Male", "Female", "Other"].includes(value)) {
+//           throw new Error("Invalid gender. Choose from Male, Female, or Other");
+//         }
+//       },
+//       // enum: ["Male", "Female", "Other"],
+//       // default: "Other",
+//     },
+
+//     profileUrl: {
+//       type: String,
+//       default:
+//         "https://t4.ftcdn.net/jpg/02/44/43/69/240_F_244436923_vkMe10KKKiw5bjhZeRDT05moxWcPpdmb.jpg",
+//     },
+//     about: {
+//       type: String,
+//       default: "This is a sample user profile. Update it as per your needs.",
+//     },
+//     skills: [{ type: String }],
+//   },
+//   createdAt: {
+//     type: Date,
+//     default: Date.now,
+//   },
+
+//   { timestamps: true
+
+//   } // add timestamps to the schema.);
+
+// );
+
+// const userModel = mongoose.model("User", userSchema);
+
+// module.exports = userModel;
