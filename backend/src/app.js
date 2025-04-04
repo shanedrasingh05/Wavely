@@ -5,9 +5,14 @@ const app = express();
 const User = require("./models/user.js")
 const {validateSignUpData} = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+
+
+
 // Middleware
 
 app.use(express.json());
+app.use(cookieParser());
 
 
 
@@ -67,7 +72,7 @@ app.post("/login", async (req, res) => {
 
 
     // Add the token to cookies and send the response with the user 
-    
+    res.cookie("token", "skjhfgdgjkbmnkjbubbcdj62902bs23l2002");
 
 
 
@@ -96,7 +101,20 @@ app.post("/login", async (req, res) => {
   }
 })
 
+// Get API GET /profile - get user profile by userId from database
+app.get("/profile", async (req, res) => {
+  const cookies = req.cookies;
 
+  const {token} = cookies;
+  // validate my token
+
+  
+   
+
+  console.log(cookies);
+  res.send("Reading Cookies")
+
+})
 
 
 // Get API GET /user - get user by email from databas
