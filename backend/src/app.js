@@ -3,7 +3,8 @@ require("dotenv").config();
 const connectDB = require("./config/database.js")
 const app = express();  
 const User = require("./models/user.js")
-
+const {validateSignUpData} = require("./utils/validation");
+const bcrypt = require("bcrypt");
 // Middleware
 
 app.use(express.json());
@@ -14,14 +15,88 @@ app.use(express.json());
 // sign API POST /signup - create a new user in database
 app.post("/signup", async(req, res) => {
       // console.log(req.body);
+try {
+      // Validate the data
+  validateSignUpData(req);
+
+
+  const  { firstName,lastName,emailId,password } = req.body;
+
+  // Encrypting password
+  const hashPassword = await bcrypt.hash(password, 10);
+  console.log(hashPassword);
+
+
+
+
  
+
+
+
   // Creating a instance of User model 
-  const user = new User(req.body);
+  const user = new User({
+    firstName,
+    lastName,
+    emailId,
+    password: hashPassword,
+  });
   await user.save()
   res.send("User registered successfully");
-
+}catch (err) {
+  res.status(400).send("Error: " + err.message);
+}
 
 })
+
+// Login API POST /login - authenticate user in database
+app.post("/login", async (req, res) => {
+ try{
+
+  const {emailId, password } = req.body;
+
+  const user = await User.findOne({emailId: emailId});
+  if (!user){
+    throw new Error("Invalid Credentials");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if(isPasswordValid){
+
+    // Generate JWT token
+
+
+    // Add the token to cookies and send the response with the user 
+    
+
+
+
+
+
+
+
+
+
+    res.send("User logged in successfully");
+  }
+
+  else{
+    throw new Error("Invalid Credentials");
+  }
+
+
+
+
+
+
+
+  }catch (err) {
+
+    res.status(400).send("Error: " + err.message);
+  }
+})
+
+
 
 
 // Get API GET /user - get user by email from databas
@@ -40,30 +115,6 @@ app.get("/user", async (req, res) => {
   }
 });                 
 
-
-
-//   const userEmail = req.query.emailId;
-
-//   try {
-//     const users = await User.find({ emailId: userEmail });
-
-//     if(users.length === 0) {
-//       res.status(404).send("User not found");
-
-//       } else {
-//       res.send(users);
-  
-//     }
-//   } catch (err) {
-//     res.status(400).send("Something Went Wrong");
-  
-// }
-// })
-
-
-
-
-//  feed API GET /feed - get all user from database
 app.get("/feed", async (req, res) => {
 
   try {
