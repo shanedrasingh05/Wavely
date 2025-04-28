@@ -37,6 +37,22 @@ module.exports = {
   validateSignUpData,
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // data from signup
 
 //   const userEmail = req.query.emailId;
