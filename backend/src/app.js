@@ -9,6 +9,7 @@ const {validateSignUpData} = require("./utils/validation");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { userAuth } = require("./middlewares/auth.js")
 
 // Middleware
 
@@ -26,7 +27,7 @@ try {
 
   // Encrypting password
   const hashPassword = await bcrypt.hash(password, 10);
-  console.log(hashPassword);
+  // console.log(hashPassword);
 
   // Creating a instance of User model
   const user = new User({
@@ -60,7 +61,7 @@ app.post("/login", async (req, res) => {
 
     // Generate JWT token
     const token= await jwt.sign({ _id: user._id}, process.env.JWT_SECRET_KEY, {expiresIn: "7d"});
-    console.log(token);
+    // console.log(token);
 
     // Add the token to cookies and send the response with the user
     res.cookie("token", token);
@@ -79,108 +80,19 @@ app.post("/login", async (req, res) => {
 })
 
 // Get API GET /profile - get user profile by userId from database
-app.get("/profile", async (req, res) => {
-  const cookies = req.cookies;
-
-  const {token} = cookies;
-  
-  // validate my token
-
-  const decodedMessage = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-  const { _id } = decodedMessage;
-  console.log('logged In user:', _id);
-
-  
-
-  // console.log(decodedMessage)
-
-
-
-  // console.log(cookies);
-  res.send("Reading Cookies")
-
-})
-
-// Get API GET /user - get user by email from databas
-app.get("/user", async (req, res) => {
-
-  const userEmail = req.body.emailId;
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const user = await User.findOne({ emailId: userEmail });
-    if(!user) {
-      res.status(404).send("User not found");
-  }else {
+    const user = req.user;
     res.send(user);
-  }
   } catch (err) {
-    res.status(400).send("Something Went Wrong");
+    res.status(400).send({ error: err.message });
   }
-});
 
-app.get("/feed", async (req, res) => {
 
-  try {
-    const users = await User.find({});
-    res.send(users);
-
-  }catch (err) {
-    res.status(400).send("Something Went Wrong");
-   }
-});
-
-// delete API DELETE /user - delete user by userId from database
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    const user = await User.findByIdAndDelete(userId);
-    if(!user) {
-      res.status(404).send("User not found");
-    }else {
-      res.send("User deleted successfully");
-    }
-  } catch (err) {
-    res.status(400).send("Something Went Wrong");
-  }
 })
 
-// update API Patch /user - update user by userId in database
-app.patch("/user/:userId", async (req, res) => {
-  const userId = req.params?.userId;
-  const data = req.body;
 
-  // console.log(data);
 
-  try {
-    const allowedUpdates = [
-      "skills",
-      "photoUrl",
-      "about",
-      "age",
-      "gender",
-    ];
-
-    const isAllowedUpdate = Object.keys(data).every((k) =>
-      allowedUpdates.includes(k)
-    );
-    if (!isAllowedUpdate) {
-      throw new Error("Update not allowed");
-    }
-
-    if(data?.skills.length>10) {
-      throw new Error("Skills array should not exceed 10 items");
-    }
-
-    await User.findByIdAndUpdate({ _id: userId }, data, {
-      returnDocument: true,
-      runValidate: true,
-    });
-
-    res.send("User Update Successfully");
-  } catch (err) {
-    res.status(400).send("Update Failed:" + err.message);
-  }
-});
 
 connectDB()
   .then(() => {
@@ -196,6 +108,38 @@ connectDB()
   .catch((err) => {
     console.error("MongoDB can not  connected", err);
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
