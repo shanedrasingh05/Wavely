@@ -89,8 +89,18 @@ app.get("/profile", userAuth, async (req, res) => {
   }
 
 
-})
+}) 
 
+
+app.post("/sendConnectionRequest",userAuth, async(req, res) => {
+  const user=req.user;
+
+  // sending connetionn request
+
+  console.log("Sending a connection request")
+
+  res.send(user.firstName + "sent the connection request!")
+})
 
 
 
