@@ -4,108 +4,20 @@ const express = require("express")
 require("dotenv").config();
 const connectDB = require("./config/database.js")
 const app = express();
-const User = require("./models/user.js")
-const {validateSignUpData} = require("./utils/validation");
-const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
-const { userAuth } = require("./middlewares/auth.js")
 
 // Middleware
 
 app.use(express.json());
 app.use(cookieParser());
 
-// sign API POST /signup - create a new user in database
-app.post("/signup", async(req, res) => {
-      // console.log(req.body);
-try {
-      // Validate the data
-  validateSignUpData(req);
+const authRouter = require('./routes/auth.js')
+const profileRouter = require('./routes/profile.js')
+const requestRouter = require('./routes/request.js')
 
-  const  { firstName,lastName,emailId,password } = req.body;
-
-  // Encrypting password
-  const hashPassword = await bcrypt.hash(password, 10);
-  // console.log(hashPassword);
-
-  // Creating a instance of User model
-  const user = new User({
-    firstName,
-    lastName,
-    emailId,
-    password: hashPassword,
-  });
-  await user.save()
-  res.send("User registered successfully");
-}catch (err) {
-  res.status(400).send("Error: " + err.message);
-}
-
-})
-
-// Login API POST /login - authenticate user in database
-app.post("/login", async (req, res) => {
- try{
-
-  const {emailId, password } = req.body;
-
-  const user = await User.findOne({emailId: emailId});
-  if (!user){
-    throw new Error("Invalid Credentials");
-  }
-
-  const isPasswordValid = await user.validatePassword(password);
-  // const isPasswordValid = await bcrypt.compare(password, user.password);
-
-  if(isPasswordValid){
-
-    // Generate JWT token
-    const token= await user.getJWT();
-    // const token= await jwt.sign({ _id: user._id}, process.env.JWT_SECRET_KEY, {expiresIn: "7d"});
-    // console.log(token);
-
-    // Add the token to cookies and send the response with the user
-    res.cookie("token", token,{
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-     
-    });
-
-    res.send("User logged in successfully");
-  }
-
-  else{
-    throw new Error("Invalid Credentials");
-  }
-
-  }catch (err) {
-
-    res.status(400).send("Error: " + err.message);
-  }
-})
-
-// Get API GET /profile - get user profile by userId from database
-app.get("/profile", userAuth, async (req, res) => {
-  try {
-    const user = req.user;
-    res.send(user);
-  } catch (err) {
-    res.status(400).send({ error: err.message });
-  }
-
-
-}) 
-
-
-app.post("/sendConnectionRequest",userAuth, async(req, res) => {
-  const user=req.user;
-
-  // sending connetionn request
-
-  console.log("Sending a connection request")
-
-  res.send(user.firstName + "sent the connection request!")
-})
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
 
 
 
