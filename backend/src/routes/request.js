@@ -1,7 +1,6 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth.js");
 const ConnectionRequest = require("../models/connectionRequest.js");
-
 const requestRouter = express.Router();
 
 requestRouter.post(
@@ -12,6 +11,23 @@ requestRouter.post(
       const fromUserId = req.user._id;
       const toUserId = req.params.toUserId;
       const status = req.params.status;
+
+      const allowedStatus = ["ignored", "interested"];
+
+      if (!allowedStatus.includes(status)) {
+        return res
+          .status(400)
+          .json({ message: "Invalid Status type: " + status });
+      }
+
+      // if there  is an exitsing  connectionRequest
+        const existingConnectionRequest = await ConnectionRequest.findOne({
+          fromUserId,
+          toUserId,
+        });
+
+
+
 
       const connectionRequest = new ConnectionRequest({
         fromUserId,
@@ -32,7 +48,3 @@ requestRouter.post(
 );
 
 module.exports = requestRouter;
-
- 
-
-
