@@ -73,6 +73,10 @@ const userSchema = new mongoose.Schema(
   { timestamps: { createdAt: true, updatedAt: true } } // Enables automatic timestamping
 );
 
+
+// userSchema.index({firstName:1, lastName:1, emailId:1}, {unique:true})
+
+
 userSchema.methods.getJWT= async function(){
    const user = this;
 
