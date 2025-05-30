@@ -81,10 +81,15 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
       status: "interested",
     });
 
+    if (!connectionRequest) {
+      return res.status(404).json({ message: "Connection request not found!" });
+    }
+
+    connectionRequest.status = status;
+    const data =await connectionRequest.save();
+    res.json({ message: "Connection request "+ status,data });
 
 
-
-    
   }catch(err){
     res.status(400).send({ error: err.message });
   }
