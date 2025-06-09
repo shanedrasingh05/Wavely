@@ -2,6 +2,7 @@ const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const userRouter = express.Router();
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user")
 
 const USER_SAVE_DATA = "firstName lastName profileUrl age gender about skills";
 // photoUrl
@@ -60,5 +61,51 @@ userRouter.get("/user/connections", userAuth, async (req,res)=>{
         res.status(400).send({message: err.massage})
   }
 });
+
+
+userRouter.get("/feed", userAuth, async(req,res)=>{
+  try{
+    // user should see all user cards except
+    // his own card
+    //  his connection
+    // ignored People
+    // allready rent connection request.
+
+
+    const loggedInUser = req.user;
+
+    // find all connection requests (rent + received)
+    const connectionRequests = await ConnectionRequest.find({
+
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+
+    }).select("fromUserId toUserId");
+
+    const hideUserFromFeed = new Set();
+    connectionRequests.forEach((req)=>{
+      hideUserFromFeed.add(req.fromUserId.toString()),
+      hideUserFromFeed.add(req.toUserId.toString())
+    });
+
+    // console.log(hideUserFromFeed)
+
+    const users = await User.find({
+      $and: [
+        { _id: { $nin: Array.from(hideUserFromFeed) } },
+        { _id: { $ne: loggedInUser._id } },
+      ],
+    }).select(USER_SAVE_DATA);
+
+    res.send(users);
+    // res.send(connectionRequests);
+
+
+
+
+  }catch(err){
+    res.status(400).json({message: err.message});
+  }
+})
+
 
 module.exports = userRouter;
