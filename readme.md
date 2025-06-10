@@ -10,7 +10,7 @@ Wavely is a **dating app** that connects people through shared **emotional waves
 ## ✨ Features
 
 ✅ **JWT & Cookie-based Authentication** – Secure login and signup.  
-✅ **Swipeable Feed** – Browse your waves through-out profiles and swipe to connect.  
+✅ **Swipeable Feed** – Browse your waves throughout profiles and swipe to connect.  
 ✅ **Connection Requests** – Accept/reject connection requests easily.  
 ✅ **Real-time Chat** – Powered by **Socket.io** with notification sounds.  
 ✅ **Profile Management** – Edit and update your profile details.
@@ -57,7 +57,7 @@ npm install
 npm run dev
 ```
 
-### 3️⃣ Setup environment variables
+### 3️⃣ Set up environment variables
 
 - Create a `.env` file in both **frontend** and **backend** folders.
 - Add necessary environment variables as per the `.env.example`.
@@ -82,7 +82,7 @@ Contributions are welcome! Feel free to fork the repository and submit pull requ
 ## Author 😊
 
 Shanedra Singh \
-LinkedIn : https://www.linkedin.com/in/shanedra-singh-47342821a/
+LinkedIn: https://www.linkedin.com/in/shanedra-singh-47342821a/
 
 ## Thank You
 
