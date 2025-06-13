@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "../ThemeContext";
 
 function Toggle() {
   const { theme, setTheme } = useContext(ThemeContext);
@@ -11,15 +11,15 @@ function Toggle() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white p-6">
-      <h1 className="text-2xl mb-6">🌗 Theme Switcher</h1>
+    <div className="">
+      {/* <h1 className="text-2xl mb-6">🌗 Theme Switcher</h1> */}
 
       <div className="relative inline-block text-left">
         <button
           onClick={() => setOpen(!open)}
           className="p-2 bg-gray-200 dark:bg-gray-700 rounded-full text-xl"
         >
-          ☀️/🌙
+          {theme == "light" ? '☀️' : '🌙'}
         </button>
 
         {open && (
