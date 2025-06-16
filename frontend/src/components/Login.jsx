@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constant";
 
 const Login = () => {
+  const [error, setError] = useState("");
   const [emailId, setEmailId] = useState("shanu@gmail.com");
   const [password, setPassword] = useState("shanu@123");
   const dispatch = useDispatch(); 
   const navigate = useNavigate();
+  
 
 
 
@@ -68,6 +70,7 @@ const Login = () => {
             </label>
           </div>
 
+            <p className="text-red-500j">{error}</p>
           <div className="card-actions justify-center m-2">
             <button className="btn btn-primary" onClick={handleLogin}>
               Login
