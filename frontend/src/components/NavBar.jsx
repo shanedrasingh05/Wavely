@@ -36,14 +36,16 @@ const NavBar = () => {
 
 
   return (
-    <div className="navbar bg-base-300 ">
+    <div className="navbar bg-base-300 sticky top-0 z-50 ">
       <div className="flex-1">
-        <Link to="/" className="font-bold text-xl mx-2">Wavely</Link>
+        <Link to="/" className="font-bold text-xl mx-2">
+          Wavely
+        </Link>
       </div>
       <div className="flex gap-2">
         {user && (
           <div className="dropdown dropdown-end mx-1 flex font-bold">
-            <p className='px-2'>Welcome, {user.firstName} </p>
+            <p className="px-2">Welcome, {user.firstName} </p>
             <div
               tabIndex={0}
               role="button"
@@ -58,7 +60,7 @@ const NavBar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link to= "/profile" className="justify-between">
+                <Link to="/profile" className="justify-between">
                   Profile
                   <span className="badge">New</span>
                 </Link>
@@ -67,7 +69,7 @@ const NavBar = () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a onClick={handleLogout} >Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>
