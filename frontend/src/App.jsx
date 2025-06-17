@@ -6,7 +6,7 @@ import Profile from "./components/Profile";
 import Login from "./components/Login";
 // import Toggle from "./components/Toggle"
 import { Provider } from "react-redux";
-import appStore from "./utils/AppStore";
+import appStore from "./utils/appStore.js";
 import Feed from "./components/Feed";
 
 
