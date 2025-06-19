@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from '../utils/constant.js';
 import axios from 'axios';
 import { removeUser } from '../utils/userSlice.js';
+
 const NavBar = () => {
  
   const user = useSelector((store) => store.user)
@@ -66,7 +67,7 @@ const NavBar = () => {
                 </Link>
               </li>
               <li>
-                <a>Settings</a>
+                <Link to="/connections">Connections</Link>
               </li>
               <li>
                 <a onClick={handleLogout}>Logout</a>
