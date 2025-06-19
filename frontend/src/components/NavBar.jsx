@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from '../utils/constant.js';
 import axios from 'axios';
 import { removeUser } from '../utils/userSlice.js';
+import logo from "../assets/logo.png"
 
 const NavBar = () => {
  
@@ -37,11 +38,19 @@ const NavBar = () => {
 
 
   return (
-    <div className="navbar bg-base-300 sticky top-0 z-50 ">
+    <div className="navbar bg-base-300 sticky top-0 z-50 py-1 px-4 shadow-[0_2px_4px_-1px_rgba(0,0,0,0.7)] ">
       <div className="flex-1">
-        <Link to="/" className="font-bold text-xl mx-2">
-          Wavely
+        <Link to="/" className="">
+          <img
+            src={logo}
+            alt="logo"
+            className="w-16 h-16 mx-1 shadow-[1_2px_3px_rgba(0,0,0,0.7)] object-cover rounded-full"
+          />
         </Link>
+
+        {/* <Link to="/" className="font-bold text-xl mx-2">
+          Wavely
+        </Link> */}
       </div>
       <div className="flex gap-2">
         {user && (
