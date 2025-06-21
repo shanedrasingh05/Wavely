@@ -30,7 +30,7 @@ const Body = () => {
 
     }catch(err){
       if(err.status === 401){
-        alert("Please login");
+        // alert("Please login");
       navigate("/login");
       }
       console.log(err);
