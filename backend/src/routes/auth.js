@@ -29,6 +29,9 @@ authRouter.post("/signup", async (req, res) => {
 
     res.cookie("token", token, {
       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      httpOnly: true, // Cookie is not accessible via JavaScript
+      secure: true, // Cookie is only sent over HTTPS
+      sameSite: "none",
     });
 
     // res.send(user);
@@ -55,6 +58,9 @@ authRouter.post("/login", async (req, res) => {
 
       res.cookie("token", token, {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        httpOnly: true, // Cookie is not accessible via JavaScript
+        secure: true, // Cookie is only sent over HTTPS
+        sameSite: "none",
       });
 
       res.send(user);
@@ -71,7 +77,10 @@ authRouter.post("/login", async (req, res) => {
 authRouter.post("/logout", async (req, res) =>{
   res.cookie("token", null, {
     expires: new Date(Date.now()),
-  })
+    httpOnly: true, // Cookie is not accessible via JavaScript
+    secure: true, // Cookie is only sent over HTTPS
+    sameSite: "none",
+  });
  res.send("Logout Successfull");
  
 
